@@ -143,7 +143,7 @@ export const postControllers = {
             const postID = req.params.id;
 
             // no need of below code because prisma throw error if post not found 
-            
+
             // const isPostExist = await prisma.post.findUnique({
             //     where: {
             //         id: Number(postID)
@@ -177,4 +177,43 @@ export const postControllers = {
         }
 
     },
+
+    getPostsByUserID: async (req, res) => {
+        try {
+            const userID = req.params.user_id;
+
+            // Check if the user exists
+            const userExists = await prisma.user.findUnique({
+                where: { id: userID }
+            });
+
+            if (!userExists) {
+                return res.status(404).json({
+                    status: 404,
+                    message: "User not found!",
+                });
+            }
+
+            const allPosts = await prisma.post.findMany({
+                where: {
+                    user_id: Number(userID)
+                }
+            })
+
+            return res.status(200).json({
+                message: "all posts for single user",
+                status: 200,
+                posts: allPosts
+            })
+
+        } catch (error) {
+            console.error("error while getting user's post **** ", error);
+            return res.status(500).json({
+                status: 500,
+                message: "Internal server error",
+                error: error.message
+            })
+
+        }
+    }
 }
