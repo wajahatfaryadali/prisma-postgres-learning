@@ -1,10 +1,15 @@
 import { configDotenv } from "dotenv";
-import express from "express";
+import express, { Router } from "express";
+import userRoutes from "./routes/userRoutes.js";
+
+configDotenv();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-configDotenv();
+app.use(express.json())
+
+app.use('/api/user', userRoutes)
 
 app.get('/', (req, res) => {
     res.send('working')
