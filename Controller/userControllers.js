@@ -19,6 +19,34 @@ export const userControllers = {
         })
     },
 
+    // to get a single user
+    getUserByID: async (req, res) => {
+        const userID = req.params.id;
+        const user = await prisma.user.findFirst({
+            where: {
+                id: Number(userID)
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                password: false
+            }
+        })
+
+        if (user) {
+            return res.json({
+                status: 200,
+                user: user,
+            })
+        }else{
+            return res.json({
+                status: 404,
+                message: "duck! user not found",
+            }) 
+        }
+    },
+
     // to create user
     createUser: async (req, res) => {
         const { name, email, password } = req.body;
