@@ -1,6 +1,24 @@
 import prisma from "../DB/db.config.js";
 
 export const userControllers = {
+    // to get all users
+    getUsers: async (req, res) => {
+        const allUsers = await prisma.user.findMany({
+            select: {
+                name: true,
+                email: true,
+                id: true,
+                password: false
+            }
+        });
+        const totalCount = await prisma.user.count({});
+
+        return res.json({
+            users: allUsers,
+            totalUsers: totalCount
+        })
+    },
+
     // to create user
     createUser: async (req, res) => {
         const { name, email, password } = req.body;
@@ -54,7 +72,6 @@ export const userControllers = {
 
         console.log('chckig ******* ', updatedUser)
         res.json({ status: 200, message: "user updated!", data: updatedUser })
-
 
     }
 }
