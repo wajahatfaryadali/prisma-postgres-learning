@@ -4,4 +4,5 @@ import { userControllers } from "../Controller/userControllers.js";
 const router = Router();
 
 router.post('/', userControllers.createUser)
+router.put('/:id', userControllers.updateUser)
 export default router;

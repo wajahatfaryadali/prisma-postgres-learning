@@ -34,8 +34,27 @@ export const userControllers = {
                 data: createdUser
             }
         )
+    },
 
-        console.log('checking data ****** ', req.body)
-        return res.send('Create user route working in controller');
+    // to update user
+    updateUser: async (req, res) => {
+        const userID = req.params.id;
+        const { name, email, password } = req.body;
+
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: Number(userID),
+            },
+            data: {
+                name,
+                email,
+                password
+            }
+        })
+
+        console.log('chckig ******* ', updatedUser)
+        res.json({ status: 200, message: "user updated!", data: updatedUser })
+
+
     }
 }
