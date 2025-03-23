@@ -39,11 +39,11 @@ export const userControllers = {
                 status: 200,
                 user: user,
             })
-        }else{
+        } else {
             return res.json({
                 status: 404,
                 message: "duck! user not found",
-            }) 
+            })
         }
     },
 
@@ -100,6 +100,56 @@ export const userControllers = {
 
         console.log('chckig ******* ', updatedUser)
         res.json({ status: 200, message: "user updated!", data: updatedUser })
+
+    },
+
+    // to delete user
+    deleteUser: async (req, res) => {
+
+        try {
+            const userID = req.params.id;
+
+            const isUserExist = await prisma.user.findUnique({
+                where: {
+                    id: Number(userID)
+                }
+            })
+
+            console.log("********** isUserExist ************** ", isUserExist)
+
+            if (isUserExist) {
+                const deletedUser = await prisma.user.delete({
+                    where: {
+                        id: Number(userID)
+                    },
+                    select: {
+                        name: true,
+                        id: true,
+                        email: true,
+                        password: false
+                    }
+                })
+                return res.json({
+                    status: 200,
+                    message: "user deleted successfully!",
+                    user: deletedUser
+                })
+
+            } else {
+                return res.json({
+                    status: 404,
+                    message: "user not found!",
+                })
+            }
+
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            return res.status(500).json({
+                status: 500,
+                message: "Internal server error",
+                error: error.message
+            });
+        }
 
     }
 }
