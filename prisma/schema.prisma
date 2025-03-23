@@ -14,9 +14,31 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String? // means nullable
-  email String @unique
-  password String?
-  craeted_at DateTime @default(now())
+  id         Int       @id @default(autoincrement())
+  name       String? // means nullable
+  email      String    @unique
+  password   String?
+  posts      Post[]
+  comments   Comment[]
+  craeted_at DateTime  @default(now())
+}
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  user          User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       Int
+  title         String
+  description   String
+  comment_count BigInt    @default(0)
+  comments      Comment[]
+  created_at    DateTime  @default(now())
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  post    Post   @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id Int
+  comment String
+  user_id Int
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
