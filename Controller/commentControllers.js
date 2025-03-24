@@ -1,4 +1,4 @@
-import prisma from "../DB/db.config"
+import prisma from "../DB/db.config.js"
 
 export const commentControllers = {
     // to get all comments
@@ -54,6 +54,17 @@ export const commentControllers = {
                 })
             }
 
+            await prisma.post.update({
+                where: {
+                    id: Number(post_id)
+                },
+                data: {
+                    comment_count: {
+                        increment: 1
+                    }
+                }
+            })
+
             const newComment = await prisma.comment.create({
                 data: {
                     post_id,
@@ -86,7 +97,7 @@ export const commentControllers = {
 
             const comment = await prisma.comment.findUnique({
                 where: {
-                    id: Number(comment_id)
+                    id: comment_id
                 }
             })
 
@@ -120,7 +131,7 @@ export const commentControllers = {
             const { comment_id, editedComment } = req.body;
             const comment = await prisma.comment.findUnique({
                 where: {
-                    id: Number(comment_id)
+                    id: comment_id
                 }
             })
 
@@ -133,7 +144,7 @@ export const commentControllers = {
 
             const updatedComment = await prisma.comment.update({
                 where: {
-                    id: Number(comment_id)
+                    id: comment_id
                 },
                 data: {
                     comment: editedComment
@@ -161,11 +172,11 @@ export const commentControllers = {
     deleteComment: async (req, res) => {
         try {
 
-            const { comment_id } = req.params;
+            const { comment_id, post_id } = req.params;
 
             const comment = await prisma.comment.findUnique({
                 where: {
-                    id: Number(comment_id)
+                    id: comment_id
                 }
             })
 
@@ -178,7 +189,18 @@ export const commentControllers = {
 
             const deletedComment = await prisma.comment.delete({
                 where: {
-                    id: Number(comment_id)
+                    id: comment_id
+                }
+            })
+
+            await prisma.post.update({
+                where: {
+                    id: Number(post_id)
+                },
+                data: {
+                    comment_count: {
+                        decrement: 1
+                    }
                 }
             })
 

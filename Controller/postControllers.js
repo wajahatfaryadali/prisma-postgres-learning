@@ -51,7 +51,21 @@ export const postControllers = {
     // to get all post
     getAllPosts: async (req, res) => {
         try {
-            const allPosts = await prisma.post.findMany({});
+            const allPosts = await prisma.post.findMany({
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    },
+                    comments: {
+                        include: {
+                            user: true
+                        }
+                    }
+                }
+            });
 
             return res.status(200).json({
                 status: 200,

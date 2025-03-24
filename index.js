@@ -2,6 +2,7 @@ import { configDotenv } from "dotenv";
 import express, { Router } from "express";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js"
+import commentRoutes from "./routes/commentRoutes.js"
 
 configDotenv();
 
@@ -12,6 +13,7 @@ app.use(express.json())
 
 app.use('/api/user', userRoutes)
 app.use('/api/post', postRoutes)
+app.use('/api/comment', commentRoutes)
 
 app.get('/', (req, res) => {
     res.send('working')

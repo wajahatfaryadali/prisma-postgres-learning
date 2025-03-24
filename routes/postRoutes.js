@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { postControllers } from "../Controller/postControllers.js";
-const router = new Router();
+const router = Router();
 
 router.get('/', postControllers.getAllPosts)
 router.get('/:id', postControllers.getPostByID)
