@@ -1,4 +1,4 @@
-import prisma from "../DB/db.config"
+import prisma from "../DB/db.config.js"
 
 export const postControllers = {
     // to create posts
@@ -7,7 +7,7 @@ export const postControllers = {
             const { user_id, title, description } = req.body;
 
             if (!user_id || !title || !description) {
-                return res.status().json({
+                return res.status(400).json({
                     status: 400,
                     message: "user_id, title, and description all fields are required!"
                 })
