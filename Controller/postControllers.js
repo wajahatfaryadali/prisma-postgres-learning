@@ -13,6 +13,20 @@ export const postControllers = {
                 })
             }
 
+            const isUserExist = await prisma.user.findUnique({
+                where: {
+                    id: Number(user_id)
+                }
+            })
+
+            if (!isUserExist) {
+                return res.status(404).json({
+                    status: 404,
+                    message: "User not found!"
+                });
+            }
+
+
             const post = await prisma.post.create({
                 data: {
                     user_id,
@@ -26,6 +40,7 @@ export const postControllers = {
                 status: 201,
                 post: post,
             })
+
 
         } catch (error) {
             console.error('error while creating post **** ', error)
@@ -183,10 +198,12 @@ export const postControllers = {
             const userID = req.params.user_id;
 
             // Check if the user exists
+            console.log('********** userid ********* ', userID)
             const userExists = await prisma.user.findUnique({
-                where: { id: userID }
+                where: { id: Number(userID) }
             });
 
+            console.log('********** user exist ********* ', userExists)
             if (!userExists) {
                 return res.status(404).json({
                     status: 404,

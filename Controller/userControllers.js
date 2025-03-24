@@ -8,6 +8,20 @@ export const userControllers = {
                 name: true,
                 email: true,
                 id: true,
+                posts: {
+                    select: {
+                        title: true,
+                        id: true,
+                        user_id: true,
+                        description: true,
+                    }
+                },
+                _count: {
+                    select: {
+                        posts: true,
+                        comments: true
+                    }
+                },
                 password: false
             }
         });

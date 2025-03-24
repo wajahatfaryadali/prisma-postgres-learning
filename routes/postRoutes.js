@@ -7,6 +7,6 @@ router.get('/:id', postControllers.getPostByID)
 router.post('/', postControllers.createPost)
 router.put('/:id', postControllers.updatePost)
 router.delete('/:id', postControllers.deletePost)
-router.delete('/user/:user_id', postControllers.deletePost)
+router.get('/user/:user_id', postControllers.getPostsByUserID)
 
 export default router;
